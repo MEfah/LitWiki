@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="LitWiki.Views.HelpPanelView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LitWiki.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="1920">
+    <ScrollViewer>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="1" Background="White" Width="{StaticResource PageWidth}">
+                <StackPanel Margin="10">
+                    <TextBlock Text="Начало работы" Style="{StaticResource Header}"/>
+                    <TextBlock TextWrapping="Wrap" FontSize="16" Margin="0,10">
+                        Данный раздел содержит информацию о принципах работы приложения LitWiki. Если вы пользуетесь этим приложением в первый раз, вам
+                        настоятельно рекоммендуется ознакомиться с информацией, изложенной ниже.
+                    </TextBlock>
+                    <TextBlock Text="Дерево проекта" Style="{StaticResource SubHeader}" Margin="0,15,0,0"/>
+                    <TextBlock TextWrapping="Wrap" FontSize="16" Margin="0,10">
+                        В левой частии экрана находится дерево проекта (см. Изображение ниже). Оно содержит элементы трёх типов: справочники, группы и записи.
+                        Эти элементы можно использовать, чтобы составлять сложные структуры из заметок. Справочники содержат шаблоны, задающие содержимое
+                        записей и состояний, и используются, чтобы описывать целые классы объектов литературного мира. Например, при создании проекта
+                        в него добавляются справочники "Персонажи", "Локации" и "События". 
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

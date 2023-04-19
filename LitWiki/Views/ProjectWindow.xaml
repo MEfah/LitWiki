@@ -1,0 +1,77 @@
+﻿<Window x:Class="LitWiki.Views.ProjectWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:m="clr-namespace:LitWiki.Models"
+        xmlns:local="clr-namespace:LitWiki.Views"
+        xmlns:vm="clr-namespace:LitWiki.ViewModels"
+        xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs"
+        xmlns:tool="clr-namespace:LitWiki.Tools"
+        md:DialogServiceViews.IsRegistered="True"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=vm:ProjectWindowViewModel}"
+        Title="ProjectWindow" Height="1080" Width="1920" WindowState="Maximized">
+    <Window.Resources>
+        <tool:DataTypeConverter x:Key="DataTypeConverter"/>
+    </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveCommand}"/>
+        <KeyBinding Gesture="Ctrl+O" Command="{Binding OpenCommand}"/>
+        <KeyBinding Gesture="Alt+F4" Command="{Binding CloseCommand}"/>
+    </Window.InputBindings>
+    <Grid Background="{StaticResource ButtonBackgroundDefault}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Menu Grid.ColumnSpan="3">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Сохранить" Command="{Binding SaveCommand}" InputGestureText="Ctrl+S"/>
+                <MenuItem Header="Сохранить как..." Command="{Binding SaveAsCommand}"/>
+                <Separator/>
+                <MenuItem Header="Открыть" Command="{Binding OpenCommand}" InputGestureText="Ctrl+O"/>
+                <Separator/>
+                <MenuItem Header="Закрыть окно" Command="{Binding CloseCommand}" InputGestureText="Alt+F4"/>
+            </MenuItem>
+            <MenuItem Header="Правка">
+                <MenuItem Header="Переименовать..." Command="{Binding RenameCommand}"/>
+                <Separator/>
+                <MenuItem Header="Перейти к справочнику..." Command="{Binding GoToDirectoryCommand}"/>
+                <MenuItem Header="Перейти к записи..." Command="{Binding GoToEntryCommand}"/>
+                <Separator/>
+                <MenuItem Header="Найти состояние..." Command="{Binding FindStateCommand}"/>
+            </MenuItem>
+            <MenuItem Header="Вид">
+                <MenuItem Header="Переключить видимость полей" Command="{Binding SwitchEmptyFieldVisibilityCommand}"/>
+            </MenuItem>
+            <MenuItem Header="Помощь" Command="{Binding HelpCommand}"/>
+        </Menu>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{StaticResource SideBarGridWidth}"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="8*"/>
+            </Grid.ColumnDefinitions>
+
+            <local:HierarchyView Grid.Column="0" DataContext="{Binding HierarchyViewModel}"/>
+            <GridSplitter Grid.Column="1" Width="3" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
+
+            <ContentControl Grid.Column="2" Content="{Binding EditedViewModel}">
+                <ContentControl.Resources>
+                    <DataTemplate DataType="{x:Type vm:DirectoryViewModel}">
+                        <local:EditDirectoryView/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type vm:EntryViewModel}">
+                        <local:EditEntryView/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type vm:EntryStateViewModel}">
+                        <local:EditStateView/>
+                    </DataTemplate>
+                </ContentControl.Resources>
+            </ContentControl>
+        </Grid>
+    </Grid>
+</Window>

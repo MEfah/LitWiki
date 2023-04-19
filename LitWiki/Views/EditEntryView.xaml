@@ -1,0 +1,66 @@
+﻿<UserControl x:Class="LitWiki.Views.EditEntryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:m="clr-namespace:LitWiki.Models"
+             xmlns:vm="clr-namespace:LitWiki.ViewModels"
+             xmlns:local="clr-namespace:LitWiki.Views"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:EntryViewModel}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="{StaticResource SideBarGridWidth}"/>
+        </Grid.ColumnDefinitions>
+
+        <ScrollViewer>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="1" Background="White" Width="{StaticResource PageWidth}">
+                    <StackPanel Margin="10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock x:Name="EntryName" Text="{Binding Name}" Style="{StaticResource Header}"/>
+                            <Button Command="{Binding RenameCommand}" Style="{StaticResource IconButton}" Grid.Column="1"
+                        Height="{Binding ElementName=EntryName, Path=ActualHeight}">
+                                <Image Source="/Resources/pen.png" Margin="5,7,5,3"/>
+                            </Button>
+
+                            <CheckBox IsChecked="{Binding HideEmptyFields}" Grid.Column="2" VerticalAlignment="Top"
+                              HorizontalAlignment="Right" VerticalContentAlignment="Center"
+                              Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.SwitchEmptyFieldVisibilityCommand}">
+                                <TextBlock Style="{StaticResource SubHeader}" Text="Скрывать пустые поля" VerticalAlignment="Center"/>
+                            </CheckBox>
+                        </Grid>
+
+                        <!--<local:FieldGroupView DataContext="{Binding Description}"/> -->
+
+                        <ItemsControl ItemsSource="{Binding FieldGroupsViewModels}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <local:FieldGroupView DataContext="{Binding}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+
+
+        <local:StateListView Grid.Column="3" DataContext="{Binding}"/>
+    </Grid>
+
+</UserControl>

@@ -1,0 +1,31 @@
+﻿<Window x:Class="LitWiki.Views.CreateProjectWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ctrl="clr-namespace:LitWiki.Views.Controls"
+        xmlns:local="clr-namespace:LitWiki.Views"
+        xmlns:com="clr-namespace:CommonControls;assembly=CommonControls"
+        xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs"
+        md:DialogServiceViews.IsRegistered="True"
+        mc:Ignorable="d"
+        Title="CreateProjectWindow" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner">
+    <StackPanel Margin="8" MinWidth="400">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Название проекта: "/>
+            <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding Name, Mode=OneWayToSource}"/>
+        </Grid>
+        <com:OpenFileControl Margin="0,12,0,0" LabelText="Папка: " Path="{Binding Path}" BrowseCommand="{Binding PickFolderCommand}"/>
+
+        <Grid>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="CancelButton" Content="Отмена" Margin="0,15,7,0" Padding="4,2,4,3" Command="{Binding CancelCommand}"/>
+                <Button x:Name="AcceptButton" Content="Подтвердить" Margin="0,15,0,0" Padding="4,2,4,3" Command="{Binding AcceptCommand}"/>
+            </StackPanel>
+        </Grid>
+    </StackPanel>
+</Window>

@@ -1,0 +1,71 @@
+﻿<UserControl x:Class="LitWiki.Views.EditStateView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:m="clr-namespace:LitWiki.Models"
+             xmlns:vm="clr-namespace:LitWiki.ViewModels"
+             xmlns:local="clr-namespace:LitWiki.Views"
+             d:DataContext="{d:DesignInstance Type=vm:EntryStateViewModel}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="{StaticResource SideBarGridWidth}"/>
+        </Grid.ColumnDefinitions>
+
+        <ScrollViewer>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="1" Background="White" Width="{StaticResource PageWidth}">
+                    <StackPanel Margin="10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock x:Name="EntryName" Text="{Binding ParentEntryViewModel.Name}" Style="{StaticResource Header}"/>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Name="StateDateTime" Text="{Binding DateTime}" Style="{StaticResource SubHeader}"/>
+                                    <Button Command="{Binding ChangeDateTimeCommand}" Style="{StaticResource IconButton}" 
+                        Height="{Binding ElementName=StateDateTime, Path=ActualHeight}">
+                                        <Image Source="/Resources/pen.png" Margin="2"/>
+                                    </Button>
+                                </StackPanel>
+                            </StackPanel>
+
+
+                            <CheckBox IsChecked="{Binding HideEmptyFields}" Grid.Column="1" 
+                              HorizontalAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Top">
+                                <TextBlock Style="{StaticResource SubHeader}" Text="Скрывать пустые поля" VerticalAlignment="Center"/>
+                            </CheckBox>
+                        </Grid>
+
+
+                        <ItemsControl ItemsSource="{Binding FieldGroupsViewModels}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <local:FieldGroupView DataContext="{Binding}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                    </StackPanel>
+                </Grid>
+            </Grid>
+           
+        </ScrollViewer>
+
+        <local:StateListView Grid.Column="3" DataContext="{Binding ParentEntryViewModel}"/>
+    </Grid>
+
+</UserControl>

@@ -1,0 +1,149 @@
+﻿<UserControl x:Class="LitWiki.Views.EditDirectoryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:m="clr-namespace:LitWiki.Models"
+             xmlns:vm="clr-namespace:LitWiki.ViewModels"
+             xmlns:v="clr-namespace:LitWiki.Views"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:tool="clr-namespace:LitWiki.Tools"
+             xmlns:local="clr-namespace:LitWiki.Views"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:DirectoryViewModel}"
+             d:DesignHeight="450" d:DesignWidth="600">
+    <UserControl.Resources>
+        <XmlDataProvider x:Key="GroupingTypeList">
+            <x:XData>
+                <GroupingTypeItems xmlns="">
+                    <GroupingTypeItem DisplayName="По группам" Value="ByGroups"/>
+                    <GroupingTypeItem DisplayName="По элементам" Value="ByElements"/>
+                </GroupingTypeItems>
+            </x:XData>
+        </XmlDataProvider>
+
+        <XmlDataProvider x:Key="SortingTypeList">
+            <x:XData>
+                <SortingTypeItems xmlns="">
+                    <SortingTypeItem DisplayName="По названию" Value="ByName"/>
+                    <SortingTypeItem DisplayName="По полю" Value="ByField"/>
+                </SortingTypeItems>
+            </x:XData>
+        </XmlDataProvider>
+
+        <tool:IntegerAdditionConverter x:Key="MathConverter"/>
+    </UserControl.Resources>
+
+    <ScrollViewer>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="1" Background="White" Width="{StaticResource PageWidth}">
+                <StackPanel Margin="10">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock x:Name="DirectoryName" Text="{Binding Name}" Style="{StaticResource Header}"/>
+                        <Button Command="{Binding RenameCommand}" Style="{StaticResource IconButton}" 
+                    Height="{Binding ElementName=DirectoryName, Path=ActualHeight}">
+                            <Image Source="/Resources/pen.png" Margin="5,7,5,3"/>
+                        </Button>
+                    </StackPanel>
+
+                    <!--<StackPanel Orientation="Horizontal" Visibility="Collapsed">
+                        <TextBlock Text="Тип группировки"/>
+                        <ComboBox ItemsSource="{Binding Source={StaticResource GroupingTypeList}, XPath=GroupingTypeItems/GroupingTypeItem}"
+                      SelectedValuePath="@Value" SelectedValue="{Binding GroupingType}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding XPath=@DisplayName}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Visibility="Collapsed">
+                        <TextBlock Text="Тип сортировки"/>
+                        <ComboBox ItemsSource="{Binding Source={StaticResource SortingTypeList}, XPath=SortingTypeItems/SortingTypeItem}"
+                      SelectedValuePath="@Value" SelectedValue="{Binding SortingStrategyViewModel.SortingType}">
+                            <ComboBox.Style>
+                                <Style>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding GroupingType}" Value="{x:Static m:GroupingType.ByGroups}">
+                                            <Setter Property="ComboBox.IsEnabled" Value="False"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding GroupingType}" Value="{x:Static m:GroupingType.ByElements}">
+                                            <Setter Property="ComboBox.IsEnabled" Value="True"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ComboBox.Style>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding XPath=@DisplayName}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <TextBlock Text="В шаблоне отсутствуют поля" Foreground="Gray" >
+                            <TextBlock.Style>
+                                <Style>
+                                    <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding DirectoryViewModel.EntryTemplateViewModel.Fields.Count}" Value="0"/>
+                                                <Condition Binding="{Binding SortingStrategyViewModel.SortingType}" Value="{x:Static m:SortingType.ByField}"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="TextBlock.Visibility" Value="Visible"/>
+                                        </MultiDataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel.Style>
+                                <Style>
+                                    <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SortingStrategyViewModel.SortingType}" Value="{x:Static m:SortingType.ByField}">
+                                <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                            </DataTrigger>
+                                        <DataTrigger Binding="{Binding DirectoryViewModel.EntryTemplateViewModel.Fields.Count}" Value="0">
+                                            <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding SortingStrategyViewModel.SortingType}" Value="{x:Static m:SortingType.ByName}">
+                                            <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+
+                            </StackPanel.Style>
+                            <TextBlock Text="Поле"/>
+                            <ComboBox ItemsSource="{Binding DirectoryViewModel.EntryTemplateViewModel.Fields}" SelectedItem="{Binding SortingStrategyViewModel.TemplateFieldViewModel}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+                </StackPanel> -->
+
+                    <!--<Button Content="Применить" Command="{Binding ApplyChangesCommand}" IsEnabled="{Binding HasChanges}" Visibility="Collapsed"/>-->
+
+                    <TextBlock Text="Шаблон записи" Style="{StaticResource SubHeader}" Margin="0,25,0,0"/>
+                    <local:TemplateView DataContext="{Binding EntryTemplateViewModel}"/>
+
+                    <TextBlock Text="Шаблон состояний" Style="{StaticResource SubHeader}" Margin="0,25,0,0"/>
+                    <local:TemplateView DataContext="{Binding StateTemplateViewModel}"/>
+
+                </StackPanel>
+            </Grid>
+
+        </Grid>
+    </ScrollViewer>
+
+</UserControl>

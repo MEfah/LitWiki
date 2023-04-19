@@ -1,0 +1,89 @@
+﻿<UserControl x:Class="LitWiki.Views.StateListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LitWiki.Views"
+             xmlns:ctrl="clr-namespace:LitWiki.Views.Controls"
+             xmlns:vm="clr-namespace:LitWiki.ViewModels"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             d:DataContext="{d:DesignInstance Type=vm:EntryViewModel}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Background="White" BorderBrush="Black" BorderThickness="0.8">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal">
+            <TextBlock x:Name="StatesLabel" Text="Состояния" Style="{StaticResource SubHeader}" Margin="0,0,5,0"/>
+            <Button Style="{StaticResource IconButton}" Height="{Binding ElementName=StatesLabel, Path=ActualHeight}" Background="#eeeeee"
+                    Command="{Binding FindStateCommand}">
+                <ctrl:MaskImage Source="/Resources/magnifying-glass.png" MaskColor="DarkGray" Margin="2"/>
+            </Button>
+        </StackPanel>
+
+        <ListBox Grid.Row="1" ItemsSource="{Binding StatesCollectionView}" Background="Transparent" BorderBrush="Transparent">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid HorizontalAlignment="Stretch">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                <i:InvokeCommandAction Command="{Binding DataContext.OpenElementCommand,
+                        RelativeSource={RelativeSource AncestorType=Window}}"
+                                           CommandParameter="{Binding}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBlock x:Name="DateTimeLabel" Text="{Binding DateTime}"/>
+                        <TextBlock Grid.Column="1"/>
+                        <Button Grid.Column="2" x:Name="RenameStateButton" Visibility="Hidden"
+                                Command="{Binding DataContext.RemoveStateCommand,
+                                RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                CommandParameter="{Binding}" Margin="5,0,0,0" Height="{Binding ElementName=DateTimeLabel, Path=ActualHeight}">
+                            <Image Source="/Resources/delete.png" />
+                        </Button>
+
+                        <Grid.Triggers>
+                            <EventTrigger RoutedEvent="MouseEnter">
+                                <EventTrigger.Actions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RenameStateButton"
+                                                                               Storyboard.TargetProperty="Visibility">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger.Actions>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="MouseLeave">
+                                <EventTrigger.Actions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RenameStateButton"
+                                                                               Storyboard.TargetProperty="Visibility">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Hidden}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger.Actions>
+                            </EventTrigger>
+                        </Grid.Triggers>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Button Grid.Row="2" Command="{Binding AddStateCommand}" Height="30">
+            <Image Source="/Resources/add.png" Margin="2.5"/>
+
+        </Button>
+    </Grid>
+</UserControl>

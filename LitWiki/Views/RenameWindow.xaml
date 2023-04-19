@@ -1,0 +1,38 @@
+﻿<Window x:Class="LitWiki.Views.RenameWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LitWiki.Views"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:tool="clr-namespace:LitWiki.Tools"
+        xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs"
+        md:DialogServiceViews.IsRegistered="True"
+        mc:Ignorable="d"
+        Title="{Binding WindowTitle}" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner">
+    <StackPanel Margin="8" MinWidth="400" FocusManager.FocusedElement="{Binding ElementName=NameTextBox}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Название: "/>
+            <TextBox x:Name="NameTextBox" Grid.Column="1" HorizontalAlignment="Stretch" 
+                     Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Behaviors>
+                    <tool:SelectTextOnFocusBehavior/>
+                </i:Interaction.Behaviors>
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding AcceptCommand}"/>
+                </TextBox.InputBindings>
+            </TextBox>
+        </Grid>
+
+        <Grid>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="CancelButton" Content="Отмена" Margin="0,15,7,0" Padding="4,2,4,3" Command="{Binding CancelCommand}"/>
+                <Button x:Name="AcceptButton" Content="Подтвердить" Margin="0,15,0,0" Padding="4,2,4,3" Command="{Binding AcceptCommand}"/>
+            </StackPanel>
+        </Grid>
+    </StackPanel>
+</Window>

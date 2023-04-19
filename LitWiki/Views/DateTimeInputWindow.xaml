@@ -1,0 +1,33 @@
+﻿<Window x:Class="LitWiki.Views.DateTimeInputWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LitWiki.Views"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:tool="clr-namespace:LitWiki.Tools"
+        xmlns:xtnd="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs" 
+        xmlns:viewmodels="clr-namespace:LitWiki.ViewModels" 
+        d:DataContext="{d:DesignInstance Type=viewmodels:DateTimeInputWindowViewModel}"
+        md:DialogServiceViews.IsRegistered="True"
+        mc:Ignorable="d"
+        Title="{Binding Title}" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner">
+    <StackPanel Margin="8" MinWidth="400" FocusManager.FocusedElement="{Binding ElementName=NameTextBox}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Временная метка: "/>
+            <xtnd:DateTimePicker Grid.Column="1" Value="{Binding DateTime}"/>
+        </Grid>
+
+        <Grid>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="CancelButton" Content="Отмена" Margin="0,15,7,0" Padding="4,2,4,3" Command="{Binding CancelCommand}"/>
+                <Button x:Name="AcceptButton" Content="Подтвердить" Margin="0,15,0,0" Padding="4,2,4,3" Command="{Binding AcceptCommand}"/>
+            </StackPanel>
+        </Grid>
+    </StackPanel>
+</Window>

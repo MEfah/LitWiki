@@ -1,0 +1,28 @@
+﻿<Window x:Class="LitWiki.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:vm="clr-namespace:LitWiki.ViewModels"
+        xmlns:v="clr-namespace:LitWiki.Views"
+        xmlns:local="clr-namespace:LitWiki"
+        xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs"
+        md:DialogServiceViews.IsRegistered="True"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="LitWiki - Выбор проекта" Height="450" Width="800" ResizeMode="CanMinimize" Icon="/Resources/archive.png">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:StartupPanelViewModel}">
+            <v:StartupPanel/>
+        </DataTemplate>
+        
+        
+        <!-- Not used -->
+        <DataTemplate DataType="{x:Type vm:SettingsPanelViewModel}">
+            <v:SettingsPanel/>
+        </DataTemplate>
+    </Window.Resources>
+
+    <ContentControl Content="{Binding CurrentViewModel}"/>
+</Window>

@@ -1,0 +1,237 @@
+﻿<UserControl x:Class="LitWiki.Views.FieldGroupView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:vm="clr-namespace:LitWiki.ViewModels"
+             xmlns:ctrl="clr-namespace:LitWiki.Views.Controls"
+             xmlns:xtnd="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:sys="clr-namespace:System;assembly=netstandard"
+             xmlns:tool="clr-namespace:LitWiki.Tools"
+             xmlns:local="clr-namespace:LitWiki.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance Type=vm:FieldGroupViewModel}">
+    <UserControl.Resources>
+        <tool:FieldTemplateSelector x:Key="TemplateSelector"/>
+
+        <DataTemplate x:Key="StringFieldTemplate">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,25">
+                <StackPanel.Style>
+                    <Style>
+                        <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding ValueProxy.Text}" Value=""/>
+                                    <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
+                                        Path=DataContext.HideEmptyFields}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+                
+                <TextBlock Text="{Binding TemplateBase.Name}" FontSize="16"/>
+                <TextBlock Text=" (Строка)" FontSize="16" Margin="0,0,7,0"/>
+                <TextBox Text="{Binding ValueProxy.Text, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+        </DataTemplate>
+        
+        <DataTemplate x:Key="TextFieldTemplate">
+            <StackPanel  Margin="0,0,0,25">
+                <StackPanel.Style>
+                    <Style>
+                        <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding ValueProxy.Text}" Value=""/>
+                                    <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
+                                        Path=DataContext.HideEmptyFields}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+                
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                    <TextBlock Text="{Binding TemplateBase.Name}" FontSize="16"/>
+                    <TextBlock Text=" (Текст)" FontSize="16"/>
+                </StackPanel>
+
+                <TextBox Text="{Binding ValueProxy.Text, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" MinLines="3"/>
+            </StackPanel>
+        </DataTemplate>
+        
+        <DataTemplate x:Key="NumberFieldTemplate">
+            <StackPanel Orientation="Horizontal"  Margin="0,0,0,25">
+                <StackPanel.Style>
+                    <Style>
+                        <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding ValueProxy.Number}" Value="0"/>
+                                    <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
+                                        Path=DataContext.HideEmptyFields}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+
+                <TextBlock Text="{Binding TemplateBase.Name}" FontSize="16"/>
+                <TextBlock Text=" (Число)" FontSize="16" Margin="0,0,7,0"/>
+                <xtnd:DoubleUpDown Value="{Binding ValueProxy.Number}"/>
+            </StackPanel>
+        </DataTemplate>
+        
+        <DataTemplate x:Key="DateTimeFieldTemplate">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,25">
+                <StackPanel.Style>
+                    <Style>
+                        <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding ValueProxy.DateTime}" Value="{x:Null}"/>
+                                    <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
+                                        Path=DataContext.HideEmptyFields}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding ValueProxy.DateTime}" Value="{x:Static sys:DateTime.MinValue}"/>
+                                    <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
+                                        Path=DataContext.HideEmptyFields}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+
+                <TextBlock Text="{Binding TemplateBase.Name}" FontSize="16"/>
+                <TextBlock Text=" (Время)" FontSize="16" Margin="0,0,7,0"/>
+                <xtnd:DateTimePicker Value="{Binding ValueProxy.DateTime, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+        </DataTemplate>
+        
+        <DataTemplate x:Key="EntryFieldTemplate">
+            <StackPanel Orientation="Horizontal"  Margin="0,0,0,25">
+                <StackPanel.Style>
+                    <Style>
+                        <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding ValueProxy.Entry}" Value="{x:Null}"/>
+                                    <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
+                                        Path=DataContext.HideEmptyFields}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+                
+                <TextBlock Text="{Binding TemplateBase.Name}" FontSize="16" VerticalAlignment="Center"/>
+                <TextBlock Text=" (Запись)" FontSize="16" VerticalAlignment="Center"/>
+
+                <local:EntryTag DataContext="{Binding ValueProxy.Entry}" Margin="5"/>
+
+                <Button Content="Выбрать" Command="{Binding SelectEntryCommand}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="ListOfEntriesFieldTemplate">
+            <Grid  Margin="0,0,0,25">
+                <Grid.Style>
+                    <Style>
+                        <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding ValueProxy.Entries.Count}" Value="0"/>
+                                    <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
+                                        Path=DataContext.HideEmptyFields}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
+                    <TextBlock Text="{Binding TemplateBase.Name}" FontSize="16"/>
+                    <TextBlock Text=" (Список записей)" FontSize="16"/>
+                </StackPanel>
+
+                <Grid Grid.Row="1">
+                    <Grid.Style>
+                        <Style>
+                            <Setter Property="Grid.Height" Value="auto"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ValueProxy.Entries.Count}" Value="0">
+                                    <Setter Property="Grid.Height" Value="80"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                    <Border Background="Transparent" BorderBrush="Gray" BorderThickness="1" CornerRadius="4"/>
+
+                    <ItemsControl ItemsSource="{Binding ValueProxy.Entries}" HorizontalAlignment="Stretch" Margin="4">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel>
+
+                                </WrapPanel>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <local:EntryTag DataContext="{Binding}" Margin="5"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+
+                <Button Content="Изменить список" Command="{Binding SelectEntryCommand}" Grid.Row="2" Margin="0,5,0,0"/>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid Margin="5,25,5,5">
+        <Grid.Style>
+            <Style>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Fields.Count}" Value="0">
+                        <Setter Property="Grid.Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Style>
+
+        <Border BorderThickness="1" BorderBrush="LightGray" Background="Transparent" CornerRadius="6"/>
+
+        <Grid Margin="10, -15, 0, 0" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <Border Background="White"/>
+            <TextBlock Text="{Binding Base.ParentDirectoryViewModel.Name, StringFormat='По справочнику &quot;{0}&quot;'}" 
+                   Background="Transparent" Style="{StaticResource SubHeader}" Margin="5,0"/>
+        </Grid>
+
+
+        <ItemsControl ItemsSource="{Binding Fields}" ItemTemplateSelector="{StaticResource TemplateSelector}" Margin="5" Padding="0,25,0,0"/>
+    </Grid>
+
+</UserControl>
